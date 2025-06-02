@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react';
-import axios
+import axios from 'axios';
+
 function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/me', {
-      credentials: 'include', 
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Not authenticated');
-        return res.json();
+    axios
+      .get('http://localhost:3000/api/v1/me', {
+        withCredentials: true, // to send cookies with request
       })
-      .then((data) => setUser(data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setUser(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   if (loading) return <p>Loading...</p>;
