@@ -1,8 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { sessionMiddleware } from './config/session.js';
 import router from './routes/index.js';
 import connectDB from './models/index.js';
 
@@ -15,8 +13,6 @@ app.use(cors({
   credentials: true
 }))
 app.use(express.json());
-app.use(cookieParser());
-app.use(sessionMiddleware);
 
 app.use(router);
 

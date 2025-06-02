@@ -5,32 +5,34 @@ import axios from 'axios'
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true)
   const [errorMsg, setErrorMsg] = useState('')
-  const emailRef = useRef(null)
+  const usernameRef = useRef(null)
   const passwordRef = useRef(null)
   const navigate = useNavigate()
 
-  const handleLoginInfo = async (e) => {
-    e.preventDefault()
-    setErrorMsg('')
-    const email = emailRef.current.value
-    const password = passwordRef.current.value
-    try {
-      const response = await axios.post(
-        isLogin
-          ? 'http://localhost:3000/api/v1/login'
-          : 'http://localhost:3000/api/v1/register',
-        { username: email, password }
-      )
-      console.log(response.data)
-      navigate('/dashboard')
-    } catch (error) {
-      if (error.response && error.response.data) {
-        setErrorMsg(error.response.data.message || 'An error occurred')
-      } else {
-        setErrorMsg(error.message)
-      }
+ const handleLoginInfo = async (e) => {
+  setErrorMsg('')
+  const username = usernameRef.current.value
+  const password = passwordRef.current.value
+  try {
+    const response = await axios.post(
+      isLogin
+        ? 'http://localhost:3000/api/v1/login'
+        : 'http://localhost:3000/api/v1/register',
+      { username: username, password }
+    )
+
+    // ✅ Store the JWT token
+    localStorage.setItem('jwt', response.data.token)
+
+    navigate('/dashboard')
+  } catch (error) {
+    if (error.response && error.response.data) {
+      setErrorMsg(error.response.data.error || 'An error occurred')
+    } else {
+      setErrorMsg(error.message)
     }
   }
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 px-4">
@@ -40,11 +42,11 @@ const Auth = () => {
         </h2>
         <form className="space-y-4" onSubmit={handleLoginInfo}>
           <div>
-            <label className="block text-gray-300 mb-1">Email</label>
+            <label className="block text-gray-300 mb-1">username</label>
             <input
-              type="email"
-              name="email"
-              ref={emailRef}
+              type="username"
+              name="username"
+              ref={usernameRef}
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-gray-400"
               placeholder="you@example.com"
               required

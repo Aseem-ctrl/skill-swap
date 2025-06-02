@@ -15,7 +15,6 @@ const Sidebar = () => {
           </li>
           <li
             className="hover:text-indigo-500 cursor-pointer transition-colors"
-            onClick={() => navigate("/profile")}
           >
             User Profile
           </li>
@@ -24,8 +23,7 @@ const Sidebar = () => {
       <button
         className="mt-8 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors"
         onClick={() => {
-          // Add logout logic here
-          alert("Logged out");
+          navigate("/");
         }}
       >
         Logout
